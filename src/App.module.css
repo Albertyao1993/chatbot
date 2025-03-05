@@ -1,0 +1,40 @@
+.App {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+.Header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.Logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.Title {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.ChatContainer {
+  flex: 1;
+  overflow: hidden;
+  padding: 20px 0;
+  position: relative;
+}
+
+.Message {
+  margin-bottom: 20px;
+}
