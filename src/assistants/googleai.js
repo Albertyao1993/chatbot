@@ -22,4 +22,16 @@ export class GoogleAI {
             throw error;
         }
     }
+
+    async *sendMessageWithStream(message){
+        try {
+            const result = await this.history.sendMessageStream(message);
+
+            for await(const chunk of result.stream){
+                yield chunk.text()
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
 }

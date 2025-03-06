@@ -11,22 +11,39 @@ function App() {
   const assistant = new GoogleAI('gemini-1.5-flash');
 
   const [messages, setMessages] = useState([]);
-
+  const [isStreaming, setIsStreaming] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const addMessage = (message) => {
     setMessages((prevMessages) => [...prevMessages, message]);
   }
 
+  const updateMessageContent = (content) => {
+    setMessages((prevMessages) => prevMessages.map((message,index) => 
+      index === prevMessages.length - 1 ? {...message, content: message.content + content} : message
+    ));
+  }
+
   const handleContentChange = async (content) => {
     addMessage({role: 'user', content});
     setIsLoading(true);
     try {
-      const result = await assistant.sendMessage(content);
-      addMessage({role: 'assistant', content: result});
+      const result = assistant.sendMessageWithStream(content);
+      let isFirstChunk = false;
+      for await (const chunk of result){
+        if(!isFirstChunk){
+          isFirstChunk = true;
+          addMessage({role: 'assistant', content: ""});
+          setIsLoading(false);
+          setIsStreaming(true);
+        }
+        updateMessageContent(chunk);
+      }
+      setIsStreaming(false);
     } catch (error) {
       console.error('Error sending message:', error);
       addMessage({role: 'assistant', content: 'Sorry, there was an error. Please try again later.'});
+      setIsStreaming(false);
     } finally {
       setIsLoading(false);
     }
@@ -43,7 +60,7 @@ function App() {
         <Chat messages={messages} />
       </div>
       <div>
-        <Controls content={messages} onSend={handleContentChange} isDisabbled={isLoading} />
+        <Controls content={messages} onSend={handleContentChange} isDisabbled={isLoading || isStreaming} />
       </div>
     </div>
   );

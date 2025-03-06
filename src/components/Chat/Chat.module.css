@@ -1,27 +1,31 @@
 .Chat {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    height: 100%;
-    padding: 8px;
-    overflow-y: auto;
-  }
-  
-  .Message {
-    padding: 12px 16px;
-    border-radius: 8px;
-    max-width: 80%;
-    word-wrap: break-word;
-  }
-  
-  .user {
-    background-color: #e3f2fd;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  padding: 8px;
+  overflow-y: auto;
+}
+
+.Group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.Group:nth-last-of-type(2) {
+  /* 8px - gap between groups */
+  min-height: calc(100% - 8px);
+}
+
+.Message {
+  width: 90%;
+  padding: 0 16px;
+  border-radius: 16px;
+  font-size: 14px;
+
+  &[data-role="user"] {
     align-self: flex-end;
-    color: #1976d2;
+    background: #f3f3f3;
   }
-  
-  .assistant {
-    background-color: #f5f5f5;
-    align-self: flex-start;
-    color: #333;
-  }
+}

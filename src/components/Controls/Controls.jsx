@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import styles from "./Controls.module.css";
 import TextareaAutosize from 'react-textarea-autosize';
 
-export function Controls({isDisabbled = false, onSend }) {
+export function Controls({isDisabled = false, onSend }) {
+  const testarea = useRef(null);
   const [content, setContent] = useState("");
+
+  useEffect(()=>{
+    if(!isDisabled ){
+      testarea.current.focus();
+    }
+  },[isDisabled])
 
   function handleContentChange(event) {
     // 在这里设置断点，可以查看 event 对象的内容
@@ -31,6 +38,7 @@ export function Controls({isDisabbled = false, onSend }) {
         <TextareaAutosize
           minRows={1}
           maxRows={5}
+          ref={testarea}
           className={styles.TextArea}
           placeholder="Message AI Chatbot"
           value={content}
@@ -38,7 +46,7 @@ export function Controls({isDisabbled = false, onSend }) {
           onKeyDown={handleEnterPress}
         />
       </div>
-      <button className={styles.Button} onClick={handleContentSend} disabled={isDisabbled}>
+      <button className={styles.Button} onClick={handleContentSend} disabled={isDisabled}>
         <SendIcon />
       </button>
     </div>
